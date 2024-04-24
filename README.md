@@ -20,6 +20,16 @@ To install Honamic.SepidarApi, run the following command in the Package Manager 
 ```
 PM> Install-Package Honamic.SepidarApi
 ```
+Sepidar Documents
+-----------------
+  <a href="https://www.sepidarsystem.com/dl/sepidar-e-commerce-web-service-v1.0.0.pdf">
+      sepidar-e-commerce-web-service-v1.0.0.pdf
+  </a>
+  <br/>
+  <a href="https://www.sepidarsystem.com/api/sepidar/">
+      Sepidar Swagger
+  </a>
+<br/>
 
 ## Usage
 
@@ -37,4 +47,44 @@ PM> Install-Package Honamic.SepidarApi
         });
 
         services.AddSepidarApiServices();
+        services.AddTransient<TestService>();
+
+```
+```csharp
+public class TestService 
+{
+    private readonly ILogger<TestService> _logger;
+    private readonly IOptionsMonitor<SepidarApiOptions> options;
+    private readonly UserApiService userService;
+    private readonly ItemApiService itemService;
+    private readonly CustomerApiService customerService;
+
+    public TestService(ILogger<TestService> logger,
+        IOptionsMonitor<SepidarApiOptions> sepidarOptions,
+        UserApiService userService,
+        ItemApiService itemService,
+        CustomerApiService customerService)
+    {
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.options = sepidarOptions;
+        this.userService = userService;
+        this.itemService = itemService;
+        this.customerService = customerService;
+    }
+
+    public async void Run()
+    {
+        if (options.CurrentValue.AutoLogin)
+        {
+            _logger.LogWarning("Auto login is enabled");
+        }
+        else
+        {
+            var loginResult = await userService.Login(options.CurrentValue.Username, options.CurrentValue.Password);
+            _logger.LogWarning($"login as {loginResult}");
+        }
+
+        var customers = await customerService.GetCustomers();      
+    }
+}
 ```
