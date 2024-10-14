@@ -1,4 +1,5 @@
-﻿using Honamic.SepidarApi.Options;
+﻿using Honamic.SepidarApi.ApiServices.Stocks;
+using Honamic.SepidarApi.Options;
 using Honamic.SepidarApi.Services.Customers;
 using Honamic.SepidarApi.Services.Items;
 using Honamic.SepidarApi.Services.Users;
@@ -14,18 +15,21 @@ public class TestService : ITestService
     private readonly UserApiService userService;
     private readonly ItemApiService itemService;
     private readonly CustomerApiService customerService;
+    private readonly StockApiService stockApiService;
 
     public TestService(ILogger<TestService> logger,
         IOptionsMonitor<SepidarApiOptions> sepidarOptions,
         UserApiService userService,
         ItemApiService itemService,
-        CustomerApiService customerService)
+        CustomerApiService customerService,
+        StockApiService stockApiService)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         this.options = sepidarOptions;
         this.userService = userService;
         this.itemService = itemService;
         this.customerService = customerService;
+        this.stockApiService = stockApiService;
     }
 
     public async void Run()
@@ -42,6 +46,9 @@ public class TestService : ITestService
             _logger.LogWarning($"login as {loginResult}");
         }
 
+        var Inventories = await itemService.GetInventories();
+        _logger.LogWarning($"Inventories count {Inventories.Count()}");
+
         var items = await itemService.GetItems();
         _logger.LogWarning($"items count {items.Count()}");
 
@@ -53,6 +60,9 @@ public class TestService : ITestService
 
         var customer = await customerService.GetCustomer(customers.LastOrDefault().CustomerID);
         _logger.LogWarning($"customer: {customer}");
+      
+        var stocks = await stockApiService.GetStocks();
+        _logger.LogWarning($"stocks: {stocks}");
 
         Debugger.Break();
     }

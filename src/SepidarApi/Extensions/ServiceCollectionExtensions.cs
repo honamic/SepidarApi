@@ -1,5 +1,6 @@
 ﻿using Honamic.SepidarApi.ApiServices.Devices;
 using Honamic.SepidarApi.ApiServices.Quotations;
+using Honamic.SepidarApi.ApiServices.Stocks;
 using Honamic.SepidarApi.HttpClients;
 using Honamic.SepidarApi.Options;
 using Honamic.SepidarApi.Services.Customers;
@@ -23,6 +24,7 @@ public static class ServiceCollectionExtensions
         services.AddTransient<CustomerApiService>();
         services.AddTransient<GeneralApiService>();
         services.AddTransient<QuotationApiService>();
+        services.AddTransient<StockApiService>();
 
         return services;
     }
