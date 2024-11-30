@@ -21,6 +21,7 @@ public static class ServiceCollectionExtensions
         services.AddTransient<UserApiService>();
         services.AddTransient<ItemApiService>();
         services.AddTransient<UnitApiService>();
+        services.AddTransient<SaleTypeApiService>();
         services.AddTransient<CustomerApiService>();
         services.AddTransient<GeneralApiService>();
         services.AddTransient<QuotationApiService>();

@@ -16,13 +16,15 @@ public class TestService : ITestService
     private readonly ItemApiService itemService;
     private readonly CustomerApiService customerService;
     private readonly StockApiService stockApiService;
+    private readonly SaleTypeApiService saleTypeApiService;
 
     public TestService(ILogger<TestService> logger,
         IOptionsMonitor<SepidarApiOptions> sepidarOptions,
         UserApiService userService,
         ItemApiService itemService,
         CustomerApiService customerService,
-        StockApiService stockApiService)
+        StockApiService stockApiService,
+        SaleTypeApiService saleTypeApiService)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         this.options = sepidarOptions;
@@ -30,6 +32,7 @@ public class TestService : ITestService
         this.itemService = itemService;
         this.customerService = customerService;
         this.stockApiService = stockApiService;
+        this.saleTypeApiService = saleTypeApiService;
     }
 
     public async void Run()
@@ -63,6 +66,10 @@ public class TestService : ITestService
       
         var stocks = await stockApiService.GetStocks();
         _logger.LogWarning($"stocks: {stocks}");
+
+
+        var saleTypes = await saleTypeApiService.GetSaleTypes();
+        _logger.LogWarning($"saleTypes: {saleTypes}");
 
         Debugger.Break();
     }
